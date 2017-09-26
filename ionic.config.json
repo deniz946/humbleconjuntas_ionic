@@ -1,5 +1,8 @@
 {
   "name": "conjuntas-ionic",
-  "app_id": "",
-  "type": "ionic-angular"
+  "app_id": "e2343bd2",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
 }

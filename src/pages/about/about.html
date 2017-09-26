@@ -1,11 +1,77 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      About
-    </ion-title>
-  </ion-navbar>
+	<ion-toolbar>
+		<ion-title>
+			Detalles - {{pack.name}}
+		</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="options()">
+				<ion-icon name="cog"></ion-icon>
+			</button>
+		</ion-buttons>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+	<ion-searchbar placeholder="Usuario" (ionInput)="getItems($event)"></ion-searchbar>
+	<ion-segment [(ngModel)]="pagos">
+		<ion-segment-button value="paid">
+			Pagados
+		</ion-segment-button>
+		<ion-segment-button value="notpaid">
+			Pendientes
+		</ion-segment-button>
+	</ion-segment>
+	<div [ngSwitch]="pagos">
+		<ion-list *ngFor="let user of aux_users">
+			<ion-item-sliding *ngSwitchCase="'paid'" [hidden]="!user.paid">
+				<ion-item [ngStyle]="{'background-color': user.paid ? 'lightgrey': 'red'}">
+					<ion-avatar item-start>
+						<img src="../../assets/img/humble.JPG">
+					</ion-avatar>
+					<h2>{{user.username}} - <small>{{user.email}}</small></h2>
+				</ion-item>
+				<ion-item-options side="left">
+					<button ion-button color="primary" (click)="reactivateUser(user)">
+						<ion-icon name="md-checkmark"></ion-icon>
+						Reactivar
+					</button>
+				</ion-item-options>
+				<ion-item-options side="right">
+					<button ion-button color="primary" [disabled]="!user.paid">
+						<ion-icon name="mail"></ion-icon>
+						{{user.paid ? 'Enviado': 'Confirmar'}}
+					</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-list>
 
+		<ion-list *ngFor="let user of aux_users">
+			<ion-item-sliding *ngSwitchCase="'notpaid'" [hidden]="user.paid">
+				<ion-item [ngStyle]="{'background-color': user.paid ? 'lightgrey': 'red'}">
+					<ion-avatar item-start>
+						<img src="../../assets/img/humble.JPG">
+					</ion-avatar>
+					<h2>{{user.username}}</h2>
+				</ion-item>
+				<ion-item-options side="left">
+					<button ion-button color="primary" [disabled]="!user.paid" (click)="reactivateUser(user)">
+						<ion-icon name="md-checkmark"></ion-icon>
+						Reactivar
+					</button>
+				</ion-item-options>
+				<ion-item-options side="right">
+					<button ion-button color="primary" [disabled]="user.paid" (click)="confirmUser(user)">
+						<ion-icon name="mail"></ion-icon>
+						{{user.paid ? 'Enviado': 'Confirmar'}}
+					</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-list>
+	</div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>{{users.length}} Usuarios</ion-title>
+  </ion-toolbar>
+</ion-footer>
